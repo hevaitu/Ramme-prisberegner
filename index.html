@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ramme Prisberegner</title>
+    <link rel="stylesheet" href="src/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="calculator" aria-labelledby="title">
+        <div class="topbar">
+          <div>
+            <p class="eyebrow">Hertz & Vaaben</p>
+            <h1 id="title">Prisberegner til indramning</h1>
+          </div>
+          <button id="resetButton" class="icon-button" type="button" title="Nulstil til fakturapriser" aria-label="Nulstil til fakturapriser">
+            ↺
+          </button>
+        </div>
+
+        <div class="layout">
+          <form class="panel inputs" id="calculatorForm">
+            <fieldset>
+              <legend>Type og mål</legend>
+              <div class="segmented" role="radiogroup" aria-label="Opgavetype">
+                <label>
+                  <input id="standardFrame" type="radio" name="jobType" value="standard" checked>
+                  <span>Almindelig ramme</span>
+                </label>
+                <label>
+                  <input id="floatFrame" type="radio" name="jobType" value="float">
+                  <span>Svæveramme</span>
+                </label>
+              </div>
+              <div class="grid two">
+                <label>
+                  Rammens bredde
+                  <input id="frameWidth" type="number" min="1" step="0.1" value="52">
+                  <span class="unit">cm</span>
+                </label>
+                <label>
+                  Rammens højde
+                  <input id="frameHeight" type="number" min="1" step="0.1" value="62">
+                  <span class="unit">cm</span>
+                </label>
+              </div>
+              <label>
+                Antal ens rammer
+                <input id="quantity" type="number" min="1" step="1" value="1">
+                <span class="unit">stk.</span>
+              </label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Materialer</legend>
+              <label class="standard-only">
+                Rammeprofil
+                <select id="frameProfile"></select>
+              </label>
+              <label class="float-only">
+                Svæveliste
+                <select id="floatProfile"></select>
+              </label>
+              <label class="standard-only">
+                Glas
+                <select id="glassType"></select>
+              </label>
+              <label class="toggle standard-only">
+                <input id="usePassepartout" type="checkbox">
+                <span>Passepartout fast tillæg</span>
+              </label>
+              <label class="toggle standard-only">
+                <input id="includeSpacer" type="checkbox">
+                <span>Distanceliste fast tillæg</span>
+              </label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Spild</legend>
+              <div class="grid three">
+                <label>
+                  Ramme
+                  <input id="frameWaste" type="number" min="0" max="100" step="1" value="20">
+                  <span class="unit">%</span>
+                </label>
+                <label class="standard-only">
+                  Glas
+                  <input id="glassWaste" type="number" min="0" max="100" step="1" value="10">
+                  <span class="unit">%</span>
+                </label>
+                <label class="standard-only">
+                  Bagplade
+                  <input id="boardWaste" type="number" min="0" max="100" step="1" value="10">
+                  <span class="unit">%</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Salg</legend>
+              <div class="grid two">
+                <label>
+                  Indkøbspris ganges med
+                  <input id="markupMultiplier" type="number" min="1" step="0.1" value="3">
+                  <span class="unit">x</span>
+                </label>
+                <label>
+                  Afrunding
+                  <input id="rounding" type="number" min="1" step="1" value="5">
+                  <span class="unit">kr.</span>
+                </label>
+              </div>
+            </fieldset>
+          </form>
+
+          <aside class="panel result" aria-live="polite">
+            <div class="price-card">
+              <span>Pris inkl. moms</span>
+              <strong id="totalIncVat">0 kr.</strong>
+              <small id="totalExVat">0 kr. ekskl. moms</small>
+            </div>
+            <dl class="specs">
+              <div><dt>Rammemål</dt><dd id="outerSize">0 × 0 cm</dd></div>
+              <div><dt>Rammelængde inkl. spild</dt><dd id="frameMeters">0 m</dd></div>
+              <div><dt>Glasareal inkl. spild</dt><dd id="glassArea">0 m²</dd></div>
+            </dl>
+            <table>
+              <thead>
+                <tr>
+                  <th>Linje</th>
+                  <th>Ekskl. moms</th>
+                </tr>
+              </thead>
+              <tbody id="breakdown"></tbody>
+            </table>
+          </aside>
+        </div>
+      </section>
+
+      <section class="panel data-panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Startdata fra fakturaer</p>
+            <h2>Satser der kan rettes</h2>
+          </div>
+          <button id="saveNotice" class="ghost-button" type="button" disabled>Gemmes automatisk</button>
+        </div>
+        <div class="rates-grid">
+          <div>
+            <h3>Rammer</h3>
+            <div id="frameRates" class="rate-list"></div>
+          </div>
+          <div>
+            <h3>Svæverammer</h3>
+            <div id="floatRates" class="rate-list"></div>
+          </div>
+          <div>
+            <h3>Glas og bagplade</h3>
+            <div id="surfaceRates" class="rate-list"></div>
+          </div>
+          <div>
+            <h3>Faste tillæg</h3>
+            <div id="fixedRates" class="rate-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="src/main.js"></script>
+  </body>
+</html>

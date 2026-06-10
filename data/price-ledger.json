@@ -1,0 +1,69 @@
+{
+  "updated": "2026-06-10",
+  "currency": "DKK",
+  "vat": "Priser er ekskl. moms, moms vises separat i beregneren.",
+  "notes": [
+    "Startpriserne er udledt af Nyram-fakturaerne 102532, 102832 og 103009.",
+    "Beregneren bruger rammemål, materialespild og en samlet avancefaktor i stedet for særskilt arbejdsløn.",
+    "UV70 behandles som museumsglas i den simple beregner."
+  ],
+  "items": [
+    {
+      "id": "1425-102",
+      "name": "Rammeliste sort mat",
+      "category": "frame",
+      "unit": "kr./m",
+      "price": 33,
+      "source": "Faktura 0000103009"
+    },
+    {
+      "id": "1515-220",
+      "name": "Rammeliste sølv",
+      "category": "frame",
+      "unit": "kr./m",
+      "price": 28,
+      "source": "Faktura 0000103009"
+    },
+    {
+      "id": "1530-365",
+      "name": "Rammeliste brun espresso",
+      "category": "frame",
+      "unit": "kr./m",
+      "price": 53,
+      "source": "Faktura 0000102832"
+    },
+    {
+      "id": "1530-600",
+      "name": "Rammeliste massiv ask",
+      "category": "frame",
+      "unit": "kr./m",
+      "price": 59,
+      "source": "Faktura 0000102832"
+    },
+    {
+      "id": "1685-11",
+      "name": "Svæveliste sort mat",
+      "category": "float-frame",
+      "unit": "kr./m",
+      "price": 58,
+      "source": "Faktura 0000102832"
+    },
+    {
+      "id": "2-FL",
+      "name": "2 mm float glas",
+      "category": "glass",
+      "unit": "kr./m²",
+      "price": 105,
+      "source": "Faktura 0000102532"
+    },
+    {
+      "id": "UV-70",
+      "name": "UV70 / museumsglas",
+      "category": "glass",
+      "unit": "kr./m²",
+      "price": 525,
+      "source": "Faktura 0000102832"
+    }
+  ]
+}
+
