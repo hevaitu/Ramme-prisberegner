@@ -4,7 +4,11 @@ const defaults = {
     { id: "1425-102", name: "Rammeliste sort mat", unit: "kr./m", price: 33 },
     { id: "1515-220", name: "Rammeliste sølv", unit: "kr./m", price: 28 },
     { id: "1530-365", name: "Rammeliste brun espresso", unit: "kr./m", price: 53 },
-    { id: "1530-600", name: "Rammeliste massiv ask", unit: "kr./m", price: 59 }
+    { id: "1530-600", name: "Rammeliste massiv ask", unit: "kr./m", price: 59 },
+    { id: "420", name: "Rammeliste eg nr. 420", unit: "kr./m", price: 46 },
+    { id: "32RAA", name: "Rammeliste rå nr. 32", unit: "kr./m", price: 34 },
+    { id: "448", name: "Rammeliste sæbebehandlet eg nr. 448", unit: "kr./m", price: 46 },
+    { id: "461", name: "Rammeliste eg nr. 461", unit: "kr./m", price: 53 }
   ],
   floatFrames: [
     { id: "1685-11", name: "Svæveliste sort mat", unit: "kr./m", price: 58 }
@@ -14,7 +18,7 @@ const defaults = {
     { id: "UV-70", name: "UV70 / museumsglas", unit: "kr./m²", price: 525 }
   ],
   surfaces: [
-    { id: "backboard", name: "Bagplade", unit: "kr./m²", price: 0 }
+    { id: "backboard", name: "Syrefri museumspap 3 mm", unit: "kr./m²", price: 168.57 }
   ],
   fixedAddons: [
     { id: "passepartout", name: "Passepartout", unit: "kr./ramme", price: 250 },

@@ -4,8 +4,10 @@
   "vat": "Priser er ekskl. moms, moms vises separat i beregneren.",
   "notes": [
     "Startpriserne er udledt af Nyram-fakturaerne 102532, 102832 og 103009.",
+    "Egelister og bagplade er tilføjet fra Malericentralen-faktura 223897.",
     "Beregneren bruger rammemål, materialespild og en samlet avancefaktor i stedet for særskilt arbejdsløn.",
-    "UV70 behandles som museumsglas i den simple beregner."
+    "UV70 behandles som museumsglas i den simple beregner.",
+    "Bagpladeprisen 168,57 kr./m² kommer fra syrefri museumspap 70x100 til 118 kr. og 100x140 til 236 kr."
   ],
   "items": [
     {
@@ -41,6 +43,38 @@
       "source": "Faktura 0000102832"
     },
     {
+      "id": "420",
+      "name": "Rammeliste eg nr. 420",
+      "category": "frame",
+      "unit": "kr./m",
+      "price": 46,
+      "source": "Faktura_223897"
+    },
+    {
+      "id": "32RAA",
+      "name": "Rammeliste rå nr. 32",
+      "category": "frame",
+      "unit": "kr./m",
+      "price": 34,
+      "source": "Faktura_223897"
+    },
+    {
+      "id": "448",
+      "name": "Rammeliste sæbebehandlet eg nr. 448",
+      "category": "frame",
+      "unit": "kr./m",
+      "price": 46,
+      "source": "Faktura_223897"
+    },
+    {
+      "id": "461",
+      "name": "Rammeliste eg nr. 461",
+      "category": "frame",
+      "unit": "kr./m",
+      "price": 53,
+      "source": "Faktura_223897"
+    },
+    {
       "id": "1685-11",
       "name": "Svæveliste sort mat",
       "category": "float-frame",
@@ -63,7 +97,38 @@
       "unit": "kr./m²",
       "price": 525,
       "source": "Faktura 0000102832"
+    },
+    {
+      "id": "P1S-1",
+      "name": "Syrefri museumspap 70x100 3 mm",
+      "category": "backboard",
+      "unit": "kr./m²",
+      "price": 168.57,
+      "source": "Faktura_223897"
+    },
+    {
+      "id": "P2S-1",
+      "name": "Syrefri museumspap 100x140 3 mm",
+      "category": "backboard",
+      "unit": "kr./m²",
+      "price": 168.57,
+      "source": "Faktura_223897"
+    },
+    {
+      "id": "D-REFLO-27x34.5",
+      "name": "Reflo glas 27x34,5",
+      "category": "reference-only-glass",
+      "unit": "kr./stk.",
+      "price": 19.6,
+      "source": "Faktura_223897"
+    },
+    {
+      "id": "D-REFLO-40x50",
+      "name": "Reflo glas 40x50",
+      "category": "reference-only-glass",
+      "unit": "kr./stk.",
+      "price": 42,
+      "source": "Faktura_223897"
     }
   ]
 }
-

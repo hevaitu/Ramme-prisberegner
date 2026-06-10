@@ -30,6 +30,12 @@ LINE_RE = re.compile(
     rf"(?P<name>.+?)(?P<sku>[A-ZÆØÅ0-9][A-ZÆØÅ0-9\-]*)\s+"
     rf"(?P<unit_price>{MONEY})\s+(?P<amount>{MONEY})(?P<qty>\d+(?:,\d+)?)$"
 )
+MALERICENTRALEN_LINE_RE = re.compile(
+    rf"(?P<sku>[A-ZÆØÅ0-9][A-ZÆØÅ0-9\-]*|[0-9]+rå)\s+"
+    rf"(?P<name>.+?)\s+"
+    rf"(?P<qty>{MONEY})\s+(?P<unit_price>{MONEY})\s+(?P<amount>{MONEY})$",
+    re.IGNORECASE,
+)
 
 
 @dataclass
@@ -49,7 +55,7 @@ def parse_number(value: str) -> float:
 def clean_sku(value: str) -> str:
     if value.endswith("UV-70"):
         return "UV-70"
-    return value
+    return value.upper()
 
 
 def clean_name(value: str) -> str:
@@ -63,17 +69,22 @@ def extract_text(pdf_path: Path) -> str:
 
 
 def normalized_lines(text: str) -> list[str]:
+    text = text.replace("\\r\\n", " ")
     lines = [line.strip() for line in text.splitlines() if line.strip()]
     merged: list[str] = []
     buffer = ""
 
     for line in lines:
+        if "Vare Tekst Antal" in line:
+            buffer = ""
+            continue
+
         if not buffer:
             buffer = line
         else:
             buffer = f"{buffer} {line}"
 
-        if re.search(rf"{MONEY}\s+{MONEY}\d+(?:,\d+)?$", buffer):
+        if re.search(rf"{MONEY}\s+{MONEY}\d+(?:,\d+)?$", buffer) or re.search(rf"{MONEY}\s+{MONEY}\s+{MONEY}$", buffer):
             merged.append(buffer)
             buffer = ""
         elif len(buffer) > 150:
@@ -87,6 +98,20 @@ def parse_invoice(pdf_path: Path) -> list[InvoiceLine]:
     results: list[InvoiceLine] = []
 
     for line in normalized_lines(extract_text(pdf_path)):
+        supplier_match = MALERICENTRALEN_LINE_RE.search(line)
+        if supplier_match:
+            results.append(
+                InvoiceLine(
+                    invoice=invoice_id,
+                    sku=clean_sku(supplier_match.group("sku")),
+                    name=clean_name(supplier_match.group("name")),
+                    unit_price=parse_number(supplier_match.group("unit_price")),
+                    amount=parse_number(supplier_match.group("amount")),
+                    quantity=parse_number(supplier_match.group("qty")),
+                )
+            )
+            continue
+
         match = LINE_RE.search(line)
         if not match:
             continue
