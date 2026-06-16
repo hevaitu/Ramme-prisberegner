@@ -352,6 +352,10 @@ body[data-mode="float"] .standard-only {
   display: none;
 }
 
+body[data-spacer="off"] .spacer-choice {
+  display: none;
+}
+
 @media (max-width: 860px) {
   .layout,
   .rates-grid {

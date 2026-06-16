@@ -20,14 +20,17 @@ const defaults = {
   surfaces: [
     { id: "backboard", name: "Syrefri museumspap 3 mm", unit: "kr./m²", price: 168.57 }
   ],
+  spacers: [
+    { id: "10X5DIW", name: "Distanceliste hvid mat 10 x 5", unit: "kr./m", price: 14 },
+    { id: "1711-1020", name: "Distanceliste hvid malet", unit: "kr./m", price: 19 }
+  ],
   fixedAddons: [
-    { id: "passepartout", name: "Passepartout", unit: "kr./ramme", price: 250 },
-    { id: "spacer", name: "Distanceliste", unit: "kr./ramme", price: 200 },
+    { id: "passepartout", name: "Passepartout", unit: "kr./ramme", price: 200 },
     { id: "supplies", name: "Småmaterialer", unit: "kr./ramme", price: 35 }
   ]
 };
 
-const storageKey = "ramme-prisberegner-v3";
+const storageKey = "ramme-prisberegner-v4";
 let data = loadData();
 
 const formIds = [
@@ -39,6 +42,7 @@ const formIds = [
   "frameProfile",
   "floatProfile",
   "glassType",
+  "spacerProfile",
   "usePassepartout",
   "includeSpacer",
   "frameWaste",
@@ -88,6 +92,8 @@ function normalizeData(saved) {
 
 function setInitialFormValues() {
   els.rounding.value = "5";
+  els.usePassepartout.checked = false;
+  els.includeSpacer.checked = false;
 }
 
 function money(value) {
@@ -159,6 +165,7 @@ function renderRates() {
   populateSelect(els.frameProfile, data.frames);
   populateSelect(els.floatProfile, data.floatFrames);
   populateSelect(els.glassType, data.glass);
+  populateSelect(els.spacerProfile, data.spacers);
   renderRateEditor("frameRates", "frames");
   renderRateEditor("floatRates", "floatFrames");
   renderRateEditor("surfaceRates", "glass");
@@ -180,11 +187,16 @@ function renderRates() {
     surfaceContainer.appendChild(row);
   });
 
+  renderRateEditor("spacerRates", "spacers");
   renderRateEditor("fixedRates", "fixedAddons");
 }
 
 function updateMode() {
   document.body.dataset.mode = selectedJobType();
+  document.body.dataset.spacer = els.includeSpacer.checked ? "on" : "off";
+  document.querySelectorAll(".spacer-choice").forEach((node) => {
+    node.hidden = selectedJobType() !== "standard" || !els.includeSpacer.checked;
+  });
 }
 
 function calculate() {
@@ -215,15 +227,17 @@ function calculate() {
       { name: glass.name, cost: glassArea * glass.price },
       { name: "Bagplade", cost: boardArea * backboard.price }
     );
+
+    if (els.includeSpacer.checked) {
+      const spacer = byId(data.spacers, els.spacerProfile.value);
+      materialLines.push({ name: spacer.name, cost: frameMeters * spacer.price });
+    }
   }
 
   const fixedLines = [
     { name: fixedAddon("supplies").name, cost: fixedAddon("supplies").price },
     jobType === "standard" && els.usePassepartout.checked
       ? { name: fixedAddon("passepartout").name, cost: fixedAddon("passepartout").price }
-      : null,
-    jobType === "standard" && els.includeSpacer.checked
-      ? { name: fixedAddon("spacer").name, cost: fixedAddon("spacer").price }
       : null
   ].filter(Boolean);
 
@@ -274,6 +288,7 @@ function bindEvents() {
     populateSelect(els.frameProfile, data.frames);
     populateSelect(els.floatProfile, data.floatFrames);
     populateSelect(els.glassType, data.glass);
+    populateSelect(els.spacerProfile, data.spacers);
     calculate();
   });
 

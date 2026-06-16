@@ -7,7 +7,8 @@
     "Egelister og bagplade er tilføjet fra Malericentralen-faktura 223897.",
     "Beregneren bruger rammemål, materialespild og en samlet avancefaktor i stedet for særskilt arbejdsløn.",
     "UV70 behandles som museumsglas i den simple beregner.",
-    "Bagpladeprisen 168,57 kr./m² kommer fra syrefri museumspap 70x100 til 118 kr. og 100x140 til 236 kr."
+    "Bagpladeprisen 168,57 kr./m² kommer fra syrefri museumspap 70x100 til 118 kr. og 100x140 til 236 kr.",
+    "Passepartout er et fast salgstillæg på 200 kr. Distanceliste beregnes pr. meter ligesom rammelister."
   ],
   "items": [
     {
@@ -129,6 +130,22 @@
       "unit": "kr./stk.",
       "price": 42,
       "source": "Faktura_223897"
+    },
+    {
+      "id": "10X5DIW",
+      "name": "Distanceliste hvid mat 10 x 5",
+      "category": "spacer",
+      "unit": "kr./m",
+      "price": 14,
+      "source": "Faktura 0000102532"
+    },
+    {
+      "id": "1711-1020",
+      "name": "Distanceliste hvid malet",
+      "category": "spacer",
+      "unit": "kr./m",
+      "price": 19,
+      "source": "Faktura 0000102532"
     }
   ]
 }
