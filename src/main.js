@@ -27,7 +27,7 @@ const defaults = {
   ]
 };
 
-const storageKey = "ramme-prisberegner-v2";
+const storageKey = "ramme-prisberegner-v3";
 let data = loadData();
 
 const formIds = [
@@ -227,8 +227,9 @@ function calculate() {
       : null
   ].filter(Boolean);
 
-  const lines = [...materialLines, ...fixedLines].filter((line) => line.cost > 0);
-  const subtotal = lines.reduce((sum, line) => sum + line.cost * multiplier, 0) * quantity;
+  const materialSubtotal = materialLines.reduce((sum, line) => sum + line.cost * multiplier, 0);
+  const fixedSubtotal = fixedLines.reduce((sum, line) => sum + line.cost, 0);
+  const subtotal = (materialSubtotal + fixedSubtotal) * quantity;
   const rounding = Math.max(1, numeric("rounding"));
   const roundedSubtotal = Math.ceil(subtotal / rounding) * rounding;
   const totalIncVat = roundedSubtotal * (1 + data.vatRate);
@@ -240,7 +241,12 @@ function calculate() {
   document.getElementById("totalIncVat").textContent = money(totalIncVat);
 
   const rows = [
-    ...lines.map((line) => ({ name: `${line.name} × ${decimal(multiplier, 1)}`, value: line.cost * multiplier * quantity })),
+    ...materialLines
+      .filter((line) => line.cost > 0)
+      .map((line) => ({ name: `${line.name} × ${decimal(multiplier, 1)}`, value: line.cost * multiplier * quantity })),
+    ...fixedLines
+      .filter((line) => line.cost > 0)
+      .map((line) => ({ name: line.name, value: line.cost * quantity })),
     { name: "Afrunding", value: roundedSubtotal - subtotal },
     { name: "Moms 25%", value: totalIncVat - roundedSubtotal }
   ];
