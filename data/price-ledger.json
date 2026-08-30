@@ -11,6 +11,7 @@
     "Glas og bagplade beregnes som arealforbrug med et gennemsnitligt spildtillæg, som standard 20%.",
     "Bagpladeprisen 168,57 kr./m² kommer fra syrefri museumspap 70x100 til 118 kr. og 100x140 til 236 kr.",
     "Foam board syrefri 3 mm er tilføjet som valgbar bagplade. Fakturaprisen 115 kr. for 70x100 cm er omregnet til 164,29 kr./m².",
+    "Foam board syrefri 5 mm er tilføjet som valgbar bagplade. Faktura 103697 angiver 125 kr. og skåret mål 92x134 cm, omregnet til 101,40 kr./m².",
     "Passepartout er et fast salgstillæg på 200 kr. Distanceliste beregnes pr. meter ligesom rammelister."
   ],
   "items": [
@@ -157,6 +158,14 @@
       "unit": "kr./m²",
       "price": 164.29,
       "source": "Faktura 0000103398"
+    },
+    {
+      "id": "9941459",
+      "name": "Foam board skumplade syrefri 5 mm",
+      "category": "backboard",
+      "unit": "kr./m²",
+      "price": 101.4,
+      "source": "Faktura 0000103697"
     },
     {
       "id": "P2S-1",

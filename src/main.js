@@ -29,7 +29,8 @@ const defaults = {
       unit: "kr./m²",
       price: 168.57
     },
-    { id: "foam-3mm", name: "Foam board syrefri 3 mm", unit: "kr./m²", price: 164.29 }
+    { id: "foam-3mm", name: "Foam board syrefri 3 mm", unit: "kr./m²", price: 164.29 },
+    { id: "foam-5mm", name: "Foam board syrefri 5 mm", unit: "kr./m²", price: 101.4 }
   ],
   spacers: [
     { id: "10X5DIW", name: "Distanceliste hvid mat 10 x 5", unit: "kr./m", price: 14 },
@@ -41,7 +42,7 @@ const defaults = {
   ]
 };
 
-const storageKey = "ramme-prisberegner-v7";
+const storageKey = "ramme-prisberegner-v8";
 let data = loadData();
 
 const formIds = [
