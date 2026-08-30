@@ -19,11 +19,21 @@ const defaults = {
     { id: "1247-115", name: "Svæveliste ege finer", unit: "kr./m", price: 202 }
   ],
   glass: [
-    { id: "2-FL", name: "2 mm float glas", unit: "kr./m²", price: 105 },
-    { id: "UV-70", name: "UV70 / museumsglas", unit: "kr./m²", price: 425 }
+    { id: "2-FL", name: "2 mm float glas", unit: "kr./m²", price: 105, sheetWidthCm: 70, sheetHeightCm: 100 },
+    { id: "UV-70", name: "UV70 / museumsglas", unit: "kr./m²", price: 425, sheetWidthCm: 80, sheetHeightCm: 120 }
   ],
   surfaces: [
-    { id: "backboard", name: "Syrefri museumspap 3 mm", unit: "kr./m²", price: 168.57 }
+    {
+      id: "backboard",
+      name: "Syrefri museumspap 3 mm",
+      unit: "kr./m²",
+      price: 168.57,
+      sheets: [
+        { widthCm: 70, heightCm: 100 },
+        { widthCm: 100, heightCm: 140 }
+      ]
+    },
+    { id: "foam-3mm", name: "Foam board syrefri 3 mm", unit: "kr./tavle", price: 115, sheetWidthCm: 70, sheetHeightCm: 100 }
   ],
   spacers: [
     { id: "10X5DIW", name: "Distanceliste hvid mat 10 x 5", unit: "kr./m", price: 14 },
@@ -35,7 +45,7 @@ const defaults = {
   ]
 };
 
-const storageKey = "ramme-prisberegner-v5";
+const storageKey = "ramme-prisberegner-v6";
 let data = loadData();
 
 const formIds = [
@@ -47,11 +57,11 @@ const formIds = [
   "frameProfile",
   "floatProfile",
   "glassType",
+  "boardType",
   "spacerProfile",
   "usePassepartout",
   "includeSpacer",
   "frameWaste",
-  "glassWaste",
   "boardWaste",
   "markupMultiplier",
   "rounding"
@@ -132,6 +142,54 @@ function selectedJobType() {
   return els.floatFrame.checked ? "float" : "standard";
 }
 
+function sheetArea(sheet) {
+  return sheet.widthCm * sheet.heightCm / 10000;
+}
+
+function piecesPerSheet(widthCm, heightCm, sheet) {
+  if (widthCm <= 0 || heightCm <= 0) return 0;
+  const normal = Math.floor(sheet.widthCm / widthCm) * Math.floor(sheet.heightCm / heightCm);
+  const rotated = Math.floor(sheet.widthCm / heightCm) * Math.floor(sheet.heightCm / widthCm);
+  return Math.max(normal, rotated);
+}
+
+function sheetOptions(item) {
+  if (Array.isArray(item.sheets) && item.sheets.length) {
+    return item.sheets.map((sheet) => ({
+      ...sheet,
+      price: sheet.price ?? item.price * sheetArea(sheet)
+    }));
+  }
+
+  const area = item.sheetWidthCm * item.sheetHeightCm / 10000;
+  const price = item.unit === "kr./tavle" ? item.price : item.price * area;
+  return [{ widthCm: item.sheetWidthCm, heightCm: item.sheetHeightCm, price }];
+}
+
+function sheetUsage(item, widthCm, heightCm, quantity) {
+  const options = sheetOptions(item)
+    .map((sheet) => {
+      const pieces = piecesPerSheet(widthCm, heightCm, sheet);
+      const neededSheets = pieces > 0 ? Math.ceil(quantity / pieces) : quantity;
+      return {
+        sheet,
+        pieces,
+        neededSheets,
+        billableArea: neededSheets * sheetArea(sheet),
+        cost: neededSheets * sheet.price
+      };
+    });
+
+  return options.sort((a, b) => a.cost - b.cost)[0];
+}
+
+function sheetUsageText(usage) {
+  if (!usage) return "Ingen";
+  const sheetText = `${usage.sheet.widthCm} × ${usage.sheet.heightCm} cm`;
+  const piecesText = usage.pieces > 0 ? `${usage.pieces} stk./tavle` : "specialmål";
+  return `${usage.neededSheets} tavle${usage.neededSheets === 1 ? "" : "r"} ${sheetText} · ${piecesText}`;
+}
+
 function populateSelect(select, list) {
   const previousValue = select.value;
   select.innerHTML = "";
@@ -170,6 +228,7 @@ function renderRates() {
   populateSelect(els.frameProfile, data.frames);
   populateSelect(els.floatProfile, data.floatFrames);
   populateSelect(els.glassType, data.glass);
+  populateSelect(els.boardType, data.surfaces);
   populateSelect(els.spacerProfile, data.spacers);
   renderRateEditor("frameRates", "frames");
   renderRateEditor("floatRates", "floatFrames");
@@ -212,25 +271,29 @@ function calculate() {
   const frameWidth = numeric("frameWidth");
   const frameHeight = numeric("frameHeight");
   const perimeter = 2 * (frameWidth + frameHeight) / 100;
-  const area = frameWidth * frameHeight / 10000;
-  const frameMeters = perimeter * (1 + numeric("frameWaste") / 100);
-  const glassArea = area * (1 + numeric("glassWaste") / 100);
-  const boardArea = area * (1 + numeric("boardWaste") / 100);
+  const frameMetersPerUnit = perimeter * (1 + numeric("frameWaste") / 100);
+  const frameMeters = frameMetersPerUnit * quantity;
+  const boardWidth = frameWidth * (1 + numeric("boardWaste") / 100);
+  const boardHeight = frameHeight * (1 + numeric("boardWaste") / 100);
   const multiplier = Math.max(1, numeric("markupMultiplier"));
 
   const selectedFrame = jobType === "float"
     ? byId(data.floatFrames, els.floatProfile.value)
     : byId(data.frames, els.frameProfile.value);
-  const backboard = byId(data.surfaces, "backboard");
   const materialLines = [
     { name: selectedFrame.name, cost: frameMeters * selectedFrame.price }
   ];
+  let glassUsage = null;
+  let boardUsage = null;
 
   if (jobType === "standard") {
     const glass = byId(data.glass, els.glassType.value);
+    const backboard = byId(data.surfaces, els.boardType.value);
+    glassUsage = sheetUsage(glass, frameWidth, frameHeight, quantity);
+    boardUsage = sheetUsage(backboard, boardWidth, boardHeight, quantity);
     materialLines.push(
-      { name: glass.name, cost: glassArea * glass.price },
-      { name: "Bagplade", cost: boardArea * backboard.price }
+      { name: `${glass.name} (${sheetUsageText(glassUsage)})`, cost: glassUsage.cost },
+      { name: `${backboard.name} (${sheetUsageText(boardUsage)})`, cost: boardUsage.cost }
     );
 
     if (els.includeSpacer.checked) {
@@ -248,21 +311,24 @@ function calculate() {
 
   const materialSubtotal = materialLines.reduce((sum, line) => sum + line.cost * multiplier, 0);
   const fixedSubtotal = fixedLines.reduce((sum, line) => sum + line.cost, 0);
-  const subtotal = (materialSubtotal + fixedSubtotal) * quantity;
+  const subtotal = materialSubtotal + fixedSubtotal * quantity;
   const rounding = Math.max(1, numeric("rounding"));
   const roundedSubtotal = Math.ceil(subtotal / rounding) * rounding;
   const totalIncVat = roundedSubtotal * (1 + data.vatRate);
 
   document.getElementById("outerSize").textContent = `${decimal(frameWidth, 1)} × ${decimal(frameHeight, 1)} cm`;
-  document.getElementById("frameMeters").textContent = `${decimal(frameMeters)} m`;
-  document.getElementById("glassArea").textContent = jobType === "standard" ? `${decimal(glassArea)} m²` : "Ingen";
+  document.getElementById("frameMeters").textContent = quantity > 1
+    ? `${decimal(frameMetersPerUnit)} m/stk. · ${decimal(frameMeters)} m i alt`
+    : `${decimal(frameMeters)} m`;
+  document.getElementById("glassArea").textContent = sheetUsageText(glassUsage);
+  document.getElementById("boardUsage").textContent = sheetUsageText(boardUsage);
   document.getElementById("totalExVat").textContent = `${money(roundedSubtotal)} ekskl. moms`;
   document.getElementById("totalIncVat").textContent = money(totalIncVat);
 
   const rows = [
     ...materialLines
       .filter((line) => line.cost > 0)
-      .map((line) => ({ name: `${line.name} × ${decimal(multiplier, 1)}`, value: line.cost * multiplier * quantity })),
+      .map((line) => ({ name: `${line.name} × ${decimal(multiplier, 1)}`, value: line.cost * multiplier })),
     ...fixedLines
       .filter((line) => line.cost > 0)
       .map((line) => ({ name: line.name, value: line.cost * quantity })),
@@ -293,6 +359,7 @@ function bindEvents() {
     populateSelect(els.frameProfile, data.frames);
     populateSelect(els.floatProfile, data.floatFrames);
     populateSelect(els.glassType, data.glass);
+    populateSelect(els.boardType, data.surfaces);
     populateSelect(els.spacerProfile, data.spacers);
     calculate();
   });

@@ -66,6 +66,10 @@
                 Glas
                 <select id="glassType"></select>
               </label>
+              <label class="standard-only">
+                Bagplade
+                <select id="boardType"></select>
+              </label>
               <label class="toggle standard-only">
                 <input id="usePassepartout" type="checkbox">
                 <span>Passepartout fast tillæg</span>
@@ -82,15 +86,10 @@
 
             <fieldset>
               <legend>Spild</legend>
-              <div class="grid three">
+              <div class="grid two">
                 <label>
                   Ramme
                   <input id="frameWaste" type="number" min="0" max="100" step="1" value="20">
-                  <span class="unit">%</span>
-                </label>
-                <label class="standard-only">
-                  Glas
-                  <input id="glassWaste" type="number" min="0" max="100" step="1" value="10">
                   <span class="unit">%</span>
                 </label>
                 <label class="standard-only">
@@ -127,7 +126,8 @@
             <dl class="specs">
               <div><dt>Rammemål</dt><dd id="outerSize">0 × 0 cm</dd></div>
               <div><dt>Rammelængde inkl. spild</dt><dd id="frameMeters">0 m</dd></div>
-              <div><dt>Glasareal inkl. spild</dt><dd id="glassArea">0 m²</dd></div>
+              <div><dt>Glasforbrug</dt><dd id="glassArea">0 m²</dd></div>
+              <div><dt>Bagpladeforbrug</dt><dd id="boardUsage">0 m²</dd></div>
             </dl>
             <table>
               <thead>
