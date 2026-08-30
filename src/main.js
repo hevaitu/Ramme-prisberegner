@@ -1,21 +1,26 @@
 const defaults = {
   vatRate: 0.25,
   frames: [
-    { id: "1425-102", name: "Rammeliste sort mat", unit: "kr./m", price: 33 },
+    { id: "1425-102", name: "Rammeliste sort mat", unit: "kr./m", price: 38 },
     { id: "1515-220", name: "Rammeliste sølv", unit: "kr./m", price: 28 },
     { id: "1530-365", name: "Rammeliste brun espresso", unit: "kr./m", price: 53 },
     { id: "1530-600", name: "Rammeliste massiv ask", unit: "kr./m", price: 59 },
+    { id: "105-303", name: "Rammeliste sølv folie", unit: "kr./m", price: 35 },
+    { id: "036-079", name: "Rammeliste sølv nr. 036-079", unit: "kr./m", price: 30 },
+    { id: "1425-RØG", name: "Rammeliste røget eg mørk nr. 1425", unit: "kr./m", price: 71 },
+    { id: "1530-RØG", name: "Rammeliste røget eg mørk nr. 1530", unit: "kr./m", price: 86 },
     { id: "420", name: "Rammeliste eg nr. 420", unit: "kr./m", price: 46 },
     { id: "32RAA", name: "Rammeliste rå nr. 32", unit: "kr./m", price: 34 },
     { id: "448", name: "Rammeliste sæbebehandlet eg nr. 448", unit: "kr./m", price: 46 },
     { id: "461", name: "Rammeliste eg nr. 461", unit: "kr./m", price: 53 }
   ],
   floatFrames: [
-    { id: "1685-11", name: "Svæveliste sort mat", unit: "kr./m", price: 58 }
+    { id: "1685-11", name: "Svæveliste sort mat", unit: "kr./m", price: 58 },
+    { id: "1247-115", name: "Svæveliste ege finer", unit: "kr./m", price: 202 }
   ],
   glass: [
     { id: "2-FL", name: "2 mm float glas", unit: "kr./m²", price: 105 },
-    { id: "UV-70", name: "UV70 / museumsglas", unit: "kr./m²", price: 525 }
+    { id: "UV-70", name: "UV70 / museumsglas", unit: "kr./m²", price: 425 }
   ],
   surfaces: [
     { id: "backboard", name: "Syrefri museumspap 3 mm", unit: "kr./m²", price: 168.57 }
@@ -30,7 +35,7 @@ const defaults = {
   ]
 };
 
-const storageKey = "ramme-prisberegner-v4";
+const storageKey = "ramme-prisberegner-v5";
 let data = loadData();
 
 const formIds = [
