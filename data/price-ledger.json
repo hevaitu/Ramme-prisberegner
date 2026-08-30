@@ -8,9 +8,9 @@
     "Egelister og bagplade er tilføjet fra Malericentralen-faktura 223897.",
     "Beregneren bruger rammemål, materialespild og en samlet avancefaktor i stedet for særskilt arbejdsløn.",
     "UV70 behandles som museumsglas i den simple beregner.",
-    "Glas beregnes nu efter hele tavler: 2 mm float som 70x100 cm og UV70 som 80x120 cm.",
+    "Glas og bagplade beregnes som arealforbrug med et gennemsnitligt spildtillæg, som standard 20%.",
     "Bagpladeprisen 168,57 kr./m² kommer fra syrefri museumspap 70x100 til 118 kr. og 100x140 til 236 kr.",
-    "Foam board syrefri 3 mm er tilføjet som valgbar bagplade til 115 kr./tavle fra faktura 103398; tavlestørrelse er sat til 70x100 cm i beregneren.",
+    "Foam board syrefri 3 mm er tilføjet som valgbar bagplade. Fakturaprisen 115 kr. for 70x100 cm er omregnet til 164,29 kr./m².",
     "Passepartout er et fast salgstillæg på 200 kr. Distanceliste beregnes pr. meter ligesom rammelister."
   ],
   "items": [
@@ -132,7 +132,6 @@
       "category": "glass",
       "unit": "kr./m²",
       "price": 105,
-      "sheet": "70x100 cm",
       "source": "Faktura 0000102532"
     },
     {
@@ -141,7 +140,6 @@
       "category": "glass",
       "unit": "kr./m²",
       "price": 425,
-      "sheet": "80x120 cm",
       "source": "Faktura 0000103561"
     },
     {
@@ -156,9 +154,8 @@
       "id": "9941439",
       "name": "Foam board skumplade syrefri 3 mm",
       "category": "backboard",
-      "unit": "kr./tavle",
-      "price": 115,
-      "sheet": "70x100 cm",
+      "unit": "kr./m²",
+      "price": 164.29,
       "source": "Faktura 0000103398"
     },
     {
